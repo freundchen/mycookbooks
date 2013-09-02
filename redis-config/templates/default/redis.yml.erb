@@ -1,5 +1,2 @@
-<% (['development', 'production'] + [@environment]).uniq.flatten.each do |env| -%>
-<%= env %>:
-  host: <%= @redis[:host]  %>
-  port: <%= @redis[:port] || 6379 %>
-<% end -%>
+host: <%= @redis[:host]  %>
+port: <%= @redis[:port] || 6379 %>
