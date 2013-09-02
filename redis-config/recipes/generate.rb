@@ -12,7 +12,7 @@ node[:deploy].each do |application, deploy|
     owner deploy[:user]
     # define variable “@redis” to be used in the ERB template
     variables(
-      :redis => deploy[:redis] || {},
+      :redis => deploy[:redis] || {}
     )
 
     # ensure the application is restarted after the configuration
