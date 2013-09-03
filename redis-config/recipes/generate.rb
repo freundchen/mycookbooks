@@ -16,6 +16,11 @@ node[:deploy].each do |app_name, deploy_config|
     variables(
       :redis => deploy_config[:redis] || {}
     )
+
+    # only generate a file if there is Redis configuration
+    only_if do
+      deploy_config[:redis].present?
+    end
   end
 end
 
