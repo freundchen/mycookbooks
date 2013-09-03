@@ -1,7 +1,9 @@
 node[:deploy].each do |app_name, deploy_config|
+  # determine root folder of new app deployment
+  app_root = "#{deploy_config[:deploy_to]}/current"
 
-  # use template ‘redis.yml.erb’ to generate configuration file
-  template "#{deploy_config[:deploy_to]}/current/config/redis.yml" do
+  # use template ‘redis.yml.erb’ to generate 'config/redis.yml'
+  template "#{app_root}/config/redis.yml" do
     source "redis.yml.erb"
     cookbook "redis-config"
 
@@ -14,11 +16,6 @@ node[:deploy].each do |app_name, deploy_config|
     variables(
       :redis => deploy_config[:redis] || {}
     )
-
-    # generate the file only if there actually is a config folder
-    only_if do
-      File.exists?("#{deploy_config[:deploy_to]}/current/config/")
-    end
   end
 end
 
