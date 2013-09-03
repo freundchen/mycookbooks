@@ -17,7 +17,7 @@ node[:deploy].each do |application, deploy|
 
     # ensure the application is restarted after the configuration
     # is generated
-    notifies :run, "execute[restart Rails app #{application}]"
+    # notifies :run, "execute[restart Rails app #{application}]"
 
     # generate the file only if there actually is a config folder
     only_if do
