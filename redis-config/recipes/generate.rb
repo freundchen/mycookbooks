@@ -1,27 +1,23 @@
-include_recipe "deploy"
-
-node[:deploy].each do |application, deploy|
-  deploy = node[:deploy][application]
+node[:deploy].each do |app_name, deploy_config|
 
   # use template ‘redis.yml.erb’ to generate configuration file
-  template "#{deploy[:deploy_to]}/current/config/redis.yml" do
+  template "#{deploy_config[:deploy_to]}/current/config/redis.yml" do
     source "redis.yml.erb"
     cookbook "redis-config"
+
+    # set mode, group and owner of generated file
     mode "0660"
-    group deploy[:group]
-    owner deploy[:user]
+    group deploy_config[:group]
+    owner deploy_config[:user]
+
     # define variable “@redis” to be used in the ERB template
     variables(
-      :redis => deploy[:redis] || {}
+      :redis => deploy_config[:redis] || {}
     )
-
-    # ensure the application is restarted after the configuration
-    # is generated
-    # notifies :run, "execute[restart Rails app #{application}]"
 
     # generate the file only if there actually is a config folder
     only_if do
-      File.exists?("#{deploy[:deploy_to]}/current/config/")
+      File.exists?("#{deploy_config[:deploy_to]}/current/config/")
     end
   end
 end
